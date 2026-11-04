@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceAI – Automatic Speech Recognition (ASR) Studio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
+</head>
+<body>
+    <!-- Background Ambient Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-waveform-lines"></i>
+                    <i class="fa-solid fa-microphone"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Voice<span class="accent-text">AI</span></span>
+                    <span class="brand-badge">ASR STUDIO</span>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="#studio" class="nav-link active"><i class="fa-solid fa-sliders"></i> Studio</a>
+                <a href="#features" class="nav-link"><i class="fa-solid fa-sparkles"></i> Features</a>
+                <a href="/about" class="nav-link"><i class="fa-solid fa-brain-circuit"></i> About ASR</a>
+                <button class="nav-btn-secondary" id="openHistoryBtn">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                    <span class="history-count" id="navHistoryCount">0</span>
+                </button>
+            </nav>
+
+            <div class="nav-actions">
+                <div class="status-pill" id="systemStatusPill" title="Speech Recognition System Ready">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">Engine Ready</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-badge">
+                <i class="fa-solid fa-microchip-ai"></i>
+                <span>CSE AIML Project • Cloud-Ready Automatic Speech Recognition</span>
+            </div>
+            <h1 class="hero-title">
+                Convert Spoken Voice Into <br>
+                <span class="gradient-text">Precision Text In Real Time</span>
+            </h1>
+            <p class="hero-subtitle">
+                A state-of-the-art Speech-to-Text web application powered by Python Flask, 
+                Google Speech Recognition API, and client-side Web Audio synthesis. Transcribe live speech 
+                or upload audio files in English, Hindi, Marathi, and 15+ global languages.
+            </p>
+
+            <div class="hero-cta-group">
+                <a href="#studio" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-bolt"></i> Start Transcribing
+                </a>
+                <a href="/about" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-book-open-cover"></i> How ASR Works
+                </a>
+            </div>
+
+            <!-- Quick Specs Row -->
+            <div class="hero-specs-row">
+                <div class="spec-item">
+                    <i class="fa-solid fa-language spec-icon"></i>
+                    <div>
+                        <div class="spec-val">15+ Languages</div>
+                        <div class="spec-lbl">English, Hindi, Marathi & more</div>
+                    </div>
+                </div>
+                <div class="spec-divider"></div>
+                <div class="spec-item">
+                    <i class="fa-solid fa-wave-pulse spec-icon"></i>
+                    <div>
+                        <div class="spec-val">Dual Engine</div>
+                        <div class="spec-lbl">Live Streaming & Server ASR</div>
+                    </div>
+                </div>
+                <div class="spec-divider"></div>
+                <div class="spec-item">
+                    <i class="fa-solid fa-shield-halved spec-icon"></i>
+                    <div>
+                        <div class="spec-val">Privacy First</div>
+                        <div class="spec-lbl">Zero permanent audio storage</div>
+                    </div>
+                </div>
+                <div class="spec-divider"></div>
+                <div class="spec-item">
+                    <i class="fa-solid fa-cloud-check spec-icon"></i>
+                    <div>
+                        <div class="spec-val">Cloud Ready</div>
+                        <div class="spec-lbl">Public HTTPS Deployment</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASR Studio Workspace -->
+        <section id="studio" class="studio-section">
+            <div class="section-header">
+                <h2 class="section-title">Transcription Studio</h2>
+                <p class="section-desc">Choose your target language, record directly from your microphone, or upload an audio file.</p>
+            </div>
+
+            <!-- Global Control Bar: Language Selection -->
+            <div class="studio-control-bar">
+                <div class="control-label-group">
+                    <label for="languageSelect"><i class="fa-solid fa-globe"></i> Target Speech Language:</label>
+                    <span class="tooltip-text">Select language spoken in the recording</span>
+                </div>
+                <div class="language-dropdown-wrapper">
+                    <select id="languageSelect" class="form-select language-select">
+                        <optgroup label="English Accents">
+                            <option value="en-US" selected>🇺🇸 English (United States)</option>
+                            <option value="en-IN">🇮🇳 English (India)</option>
+                            <option value="en-GB">🇬🇧 English (United Kingdom)</option>
+                        </optgroup>
+                        <optgroup label="Indian Languages">
+                            <option value="hi-IN">🇮🇳 Hindi (हिन्दी)</option>
+                            <option value="mr-IN">🇮🇳 Marathi (मराठी)</option>
+                            <option value="bn-IN">🇮🇳 Bengali (বাংলা)</option>
+                            <option value="ta-IN">🇮🇳 Tamil (தமிழ்)</option>
+                            <option value="te-IN">🇮🇳 Telugu (తెలుగు)</option>
+                            <option value="gu-IN">🇮🇳 Gujarati (ગુજરાતી)</option>
+                            <option value="kn-IN">🇮🇳 Kannada (ಕನ್ನಡ)</option>
+                        </optgroup>
+                        <optgroup label="Global Languages">
+                            <option value="es-ES">🇪🇸 Spanish (Español)</option>
+                            <option value="fr-FR">🇫🇷 French (Français)</option>
+                            <option value="de-DE">🇩🇪 German (Deutsch)</option>
+                            <option value="ja-JP">🇯🇵 Japanese (日本語)</option>
+                            <option value="zh-CN">🇨🇳 Chinese (Mandarin)</option>
+                            <option value="ar-SA">🇸🇦 Arabic (العربية)</option>
+                            <option value="ru-RU">🇷🇺 Russian (Русский)</option>
+                            <option value="pt-BR">🇧🇷 Portuguese (Brasil)</option>
+                            <option value="it-IT">🇮🇹 Italian (Italiano)</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Studio Dual Grid: Input Card & Output Transcript Card -->
+            <div class="studio-grid">
+                <!-- Left Column: Audio Input Panels (Recording or Upload) -->
+                <div class="studio-card input-card">
+                    <!-- Mode Navigation Tabs -->
+                    <div class="card-tabs">
+                        <button class="tab-btn active" id="tabLiveBtn" data-target="livePanel">
+                            <i class="fa-solid fa-microphone-lines"></i> Live Recording
+                        </button>
+                        <button class="tab-btn" id="tabUploadBtn" data-target="uploadPanel">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Audio File Upload
+                        </button>
+                    </div>
+
+                    <!-- Panel 1: Live Voice Recording -->
+                    <div class="tab-panel active" id="livePanel">
+                        <div class="recording-studio">
+                            <!-- Visual Waveform Canvas -->
+                            <div class="visualizer-container">
+                                <canvas id="visualizerCanvas" width="600" height="120"></canvas>
+                                <div class="visualizer-overlay" id="visualizerOverlay">
+                                    <i class="fa-solid fa-microphone"></i>
+                                    <span>Press Start to visualize your voice</span>
+                                </div>
+                            </div>
+
+                            <!-- Live Status Indicator -->
+                            <div class="recording-status-bar">
+                                <div class="status-indicator-badge" id="recStatusBadge">
+                                    <span class="status-dot-pulse" id="recStatusDot"></span>
+                                    <span id="recStatusText">Microphone Idle</span>
+                                </div>
+                                <div class="recording-timer" id="recordingTimer">00:00</div>
+                            </div>
+
+                            <!-- Microphone Animation Ring -->
+                            <div class="mic-button-wrapper">
+                                <div class="mic-pulse-ring" id="micPulseRing"></div>
+                                <button class="btn-mic" id="mainMicBtn" title="Start / Stop Recording">
+                                    <i class="fa-solid fa-microphone" id="mainMicIcon"></i>
+                                </button>
+                            </div>
+
+                            <!-- Recording Controls -->
+                            <div class="recording-actions">
+                                <button class="btn btn-primary" id="startRecBtn">
+                                    <i class="fa-solid fa-circle-play"></i> Start Recording
+                                </button>
+                                <button class="btn btn-danger" id="stopRecBtn" disabled>
+                                    <i class="fa-solid fa-circle-stop"></i> Stop Recording
+                                </button>
+                            </div>
+
+                            <!-- Engine Mode Toggle Option -->
+                            <div class="engine-selector-box">
+                                <div class="engine-info">
+                                    <i class="fa-solid fa-gear"></i>
+                                    <span>ASR Engine Mode:</span>
+                                </div>
+                                <div class="radio-group">
+                                    <label class="radio-label" title="Live real-time streaming using Web Speech API">
+                                        <input type="radio" name="asrMode" value="streaming" checked>
+                                        <span>Instant Live Streaming</span>
+                                    </label>
+                                    <label class="radio-label" title="High-precision server recognition via Google Speech API on audio stop">
+                                        <input type="radio" name="asrMode" value="server">
+                                        <span>Server Audio (16kHz WAV)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Recorded Audio Playback Container (Appears after recording) -->
+                            <div class="recorded-audio-preview" id="recAudioPreview" style="display: none;">
+                                <div class="audio-preview-header">
+                                    <span><i class="fa-solid fa-music"></i> Recorded Voice Playback:</span>
+                                    <button class="btn-icon-sm" id="discardRecBtn" title="Discard recording">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                                <audio id="recordedAudioPlayer" controls class="w-full"></audio>
+                                <button class="btn btn-outline btn-sm w-full mt-2" id="retranscribeRecBtn">
+                                    <i class="fa-solid fa-rotate-right"></i> Transcribe With Server Engine
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 2: Audio File Upload -->
+                    <div class="tab-panel" id="uploadPanel">
+                        <div class="upload-studio">
+                            <!-- Drag & Drop Dropzone -->
+                            <div class="file-dropzone" id="fileDropzone">
+                                <input type="file" id="audioFileInput" accept=".wav,.mp3,.flac,.ogg,.m4a,.webm,.aac,.wma" class="hidden-file-input">
+                                <div class="dropzone-content">
+                                    <div class="dropzone-icon">
+                                        <i class="fa-solid fa-file-audio"></i>
+                                    </div>
+                                    <h4 class="dropzone-title">Drag & Drop Your Audio File Here</h4>
+                                    <p class="dropzone-subtitle">or click to browse from your device</p>
+                                    <div class="format-chips">
+                                        <span class="chip">.WAV (Recommended)</span>
+                                        <span class="chip">.MP3</span>
+                                        <span class="chip">.FLAC</span>
+                                        <span class="chip">.OGG</span>
+                                        <span class="chip">.M4A</span>
+                                    </div>
+                                    <span class="file-limit-note">Maximum file size: 25 MB</span>
+                                </div>
+                            </div>
+
+                            <!-- Selected File Details Card -->
+                            <div class="file-preview-card" id="filePreviewCard" style="display: none;">
+                                <div class="file-details">
+                                    <i class="fa-solid fa-file-music file-type-icon"></i>
+                                    <div class="file-info-text">
+                                        <span class="filename" id="previewFilename">audio_sample.wav</span>
+                                        <span class="filesize" id="previewFilesize">0.0 MB</span>
+                                    </div>
+                                    <button class="btn-icon-sm" id="removeFileBtn" title="Remove file">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Audio Player Preview -->
+                                <audio id="fileAudioPlayer" controls class="audio-player-element"></audio>
+
+                                <!-- Transcribe Trigger Button -->
+                                <button class="btn btn-primary btn-block" id="transcribeFileBtn">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    <span id="transcribeBtnText">Transcribe Audio File</span>
+                                </button>
+                            </div>
+
+                            <!-- Upload Processing Progress -->
+                            <div class="progress-box" id="uploadProgressBox" style="display: none;">
+                                <div class="progress-header">
+                                    <span id="progressStatusText">Converting & Processing Audio...</span>
+                                    <span id="progressPercent">0%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Transcript Management Studio -->
+                <div class="studio-card transcript-card">
+                    <div class="transcript-card-header">
+                        <div class="transcript-heading">
+                            <i class="fa-solid fa-memo-pad"></i>
+                            <h3>Speech Transcript</h3>
+                        </div>
+
+                        <!-- Real-time Metrics Pills -->
+                        <div class="metrics-row">
+                            <span class="metric-pill" title="Word count">
+                                <i class="fa-solid fa-font"></i>
+                                <span id="wordCount">0</span> words
+                            </span>
+                            <span class="metric-pill" title="Character count">
+                                <i class="fa-solid fa-text-size"></i>
+                                <span id="charCount">0</span> chars
+                            </span>
+                            <span class="metric-pill" title="Time taken for transcription">
+                                <i class="fa-solid fa-stopwatch"></i>
+                                <span id="processDuration">0.0s</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Transcript Content Textarea -->
+                    <div class="transcript-editor-container">
+                        <textarea 
+                            id="transcriptTextarea" 
+                            class="transcript-textarea" 
+                            placeholder="Your transcribed text will appear here in real time. You can also directly type, edit, or format the text anytime..."
+                            rows="12"
+                        ></textarea>
+
+                        <!-- Live Pulse Indicator while speaking -->
+                        <div class="live-transcribing-indicator" id="liveTextIndicator" style="display: none;">
+                            <span class="pulse-dot"></span>
+                            <span>Listening and transcribing live...</span>
+                        </div>
+                    </div>
+
+                    <!-- Transcript Action Buttons Toolbar -->
+                    <div class="transcript-toolbar">
+                        <div class="toolbar-left">
+                            <button class="btn-tool" id="copyTranscriptBtn" title="Copy transcript to clipboard">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                            <button class="btn-tool" id="speakTranscriptBtn" title="Read text aloud using Speech Synthesis">
+                                <i class="fa-solid fa-volume-high"></i>
+                                <span>Read Aloud</span>
+                            </button>
+                            <button class="btn-tool" id="downloadTranscriptBtn" title="Download as .TXT document">
+                                <i class="fa-solid fa-download"></i>
+                                <span>Export TXT</span>
+                            </button>
+                            <button class="btn-tool" id="saveServerBtn" title="Save transcript to history">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                <span>Save</span>
+                            </button>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn-tool danger" id="clearTranscriptBtn" title="Clear transcript">
+                                <i class="fa-solid fa-trash"></i>
+                                <span>Clear</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Transcript Metadata Footer -->
+                    <div class="transcript-footer-meta" id="transcriptMetaBox" style="display: none;">
+                        <span id="metaLangInfo"><i class="fa-solid fa-globe"></i> Language: en-US</span>
+                        <span id="metaEngineInfo"><i class="fa-solid fa-robot"></i> Engine: Google ASR</span>
+                        <span id="metaTimestamp"><i class="fa-regular fa-clock"></i> Just now</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Showcase Section -->
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <div class="hero-badge"><i class="fa-solid fa-stars"></i> System Capabilities</div>
+                <h2 class="section-title">Built for Performance & Precision</h2>
+                <p class="section-desc">Explore the engineering choices and advanced features powering the VoiceAI platform.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon bg-blue">
+                        <i class="fa-solid fa-language"></i>
+                    </div>
+                    <h3>Multilingual Recognition</h3>
+                    <p>Recognizes accents and regional dialects including English (US, UK, India), Hindi, Marathi, Spanish, French, German, and 10+ other languages with high contextual accuracy.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon bg-indigo">
+                        <i class="fa-solid fa-microphone-waveform"></i>
+                    </div>
+                    <h3>Dual Recognition Engines</h3>
+                    <p>Harness both client-side Web Speech API for low-latency live streaming, and backend Google Speech Recognition for deep acoustic verification of high-resolution 16kHz WAV audio.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon bg-cyan">
+                        <i class="fa-solid fa-file-audio"></i>
+                    </div>
+                    <h3>Smart Audio Transcoding</h3>
+                    <p>Web Audio API decodes MP3, FLAC, M4A, and OGG client-side into uncompressed 16-bit 16,000 Hz mono PCM WAV format, eliminating server-side codec conversion failures.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon bg-emerald">
+                        <i class="fa-solid fa-chart-simple"></i>
+                    </div>
+                    <h3>Live Real-Time Visualizer</h3>
+                    <p>An interactive HTML5 Canvas visualizer renders live voice waveforms and frequency spectrum bars using Web Audio AnalyserNode while recording.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon bg-purple">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3>Ephemeral & Secure</h3>
+                    <p>Uploaded audio files are automatically purged immediately after transcription. No permanent audio logs or private user recordings are stored.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon bg-amber">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <h3>Global Render Deployment</h3>
+                    <p>Engineered with production-grade WSGI Gunicorn, render.yaml blueprint, environment secrets, and HTTPS endpoints ready to serve worldwide users.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Callout Banner -->
+        <section class="cta-banner">
+            <div class="cta-content">
+                <h2>Want to understand the math & science behind ASR?</h2>
+                <p>Read our comprehensive college project documentation covering Acoustic Models, MFCCs, Language Models, and deep learning architectures.</p>
+                <a href="/about" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-graduation-cap"></i> Read Complete ASR Guide
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Saved Transcripts History Drawer/Modal -->
+    <div class="modal-backdrop" id="historyModalBackdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <h3>Saved Transcript History</h3>
+                </div>
+                <button class="btn-icon" id="closeHistoryModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="history-list" id="historyListContainer">
+                    <!-- Populated dynamically via JavaScript -->
+                    <div class="history-empty">
+                        <i class="fa-solid fa-box-open"></i>
+                        <p>No saved transcripts yet. Transcribe something and hit "Save"!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="clearAllHistoryBtn">
+                    <i class="fa-solid fa-trash-can"></i> Clear All History
+                </button>
+                <button class="btn btn-secondary" id="closeHistoryBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Website Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="logo-icon-sm">
+                    <i class="fa-solid fa-waveform-lines"></i>
+                </div>
+                <span class="footer-title">VoiceAI – Automatic Speech Recognition</span>
+            </div>
+            <p class="footer-desc">
+                CSE AIML Department Academic Project. Built with Python Flask, SpeechRecognition, Google Cloud Speech API, and Web Speech API.
+            </p>
+            <div class="footer-links">
+                <a href="/">Studio</a>
+                <span class="dot-separator">•</span>
+                <a href="/about">Educational Documentation</a>
+                <span class="dot-separator">•</span>
+                <a href="/api/health" target="_blank">API Health Status</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 VoiceAI Project. Open-source, production-ready speech-to-text.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript Logic -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+

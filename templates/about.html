@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Automatic Speech Recognition (ASR) – VoiceAI Guide</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
+</head>
+<body>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-waveform-lines"></i>
+                    <i class="fa-solid fa-microphone"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Voice<span class="accent-text">AI</span></span>
+                    <span class="brand-badge">ACADEMIC GUIDE</span>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-link"><i class="fa-solid fa-sliders"></i> Studio</a>
+                <a href="/about" class="nav-link active"><i class="fa-solid fa-brain-circuit"></i> About ASR</a>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="/" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Studio
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-wrapper">
+        <!-- Educational Hero Section -->
+        <section class="about-hero">
+            <div class="hero-badge">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>CSE AIML Department • Theory & Implementation Architecture</span>
+            </div>
+            <h1 class="about-title">
+                Understanding <span class="gradient-text">Automatic Speech Recognition</span>
+            </h1>
+            <p class="about-lead">
+                Automatic Speech Recognition (ASR), also known as Speech-to-Text (STT), is a pivotal subfield 
+                of Artificial Intelligence and Natural Language Processing (NLP) that enables computers 
+                to translate human acoustic speech signals into readable, grammatically coherent text.
+            </p>
+        </section>
+
+        <!-- Article Content Layout -->
+        <div class="about-container">
+            <!-- Table of Contents Sidebar -->
+            <aside class="about-toc">
+                <div class="toc-card">
+                    <h4><i class="fa-solid fa-list-tree"></i> Guide Outline</h4>
+                    <ul>
+                        <li><a href="#definition">1. What is ASR?</a></li>
+                        <li><a href="#how-it-works">2. How ASR Works (Pipeline)</a></li>
+                        <li><a href="#math-mfcc">3. Acoustic Processing & MFCCs</a></li>
+                        <li><a href="#models">4. Acoustic & Language Models</a></li>
+                        <li><a href="#tech-stack">5. VoiceAI Tech Stack</a></li>
+                        <li><a href="#applications">6. Industry Applications</a></li>
+                        <li><a href="#viva-questions">7. College Viva Q&A Guide</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <article class="about-article">
+                <!-- Section 1 -->
+                <section id="definition" class="doc-section">
+                    <h2><i class="fa-solid fa-circle-question section-heading-icon"></i> 1. What is Automatic Speech Recognition (ASR)?</h2>
+                    <p>
+                        Speech recognition is the capability of an electronic machine or computer program to identify spoken words and phrases, 
+                        converting continuous acoustic analog vibrations captured by a microphone transducer into discrete digital textual representation.
+                    </p>
+                    <div class="info-callout">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <div>
+                            <strong>Core Challenge:</strong> Human speech signals contain immense variability due to vocal tract differences, 
+                            accents, speaking rates, emotional inflections, homophones (e.g., "their", "there", "they're"), 
+                            and ambient background noise. A modern ASR system combines signal processing, statistical acoustic modeling, 
+                            and natural language understanding to resolve ambiguities.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2 -->
+                <section id="how-it-works" class="doc-section">
+                    <h2><i class="fa-solid fa-diagram-project section-heading-icon"></i> 2. The 5-Stage ASR Pipeline</h2>
+                    <p>
+                        Whether running on high-end cloud servers or edge devices, standard modern ASR systems follow a modular 
+                        or end-to-end multi-tier pipeline:
+                    </p>
+
+                    <div class="pipeline-flowchart">
+                        <div class="flow-step">
+                            <div class="step-num">01</div>
+                            <div class="step-content">
+                                <h4>Audio Preprocessing & Sampling</h4>
+                                <p>Capturing raw analog waveforms via microphone, digitizing at 16,000 Hz (16kHz PCM), removing DC offset, and applying pre-emphasis filters.</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="flow-step">
+                            <div class="step-num">02</div>
+                            <div class="step-content">
+                                <h4>Feature Extraction (MFCCs & Spectrograms)</h4>
+                                <p>Segmenting audio into 20–30ms overlapping window frames, computing Fast Fourier Transforms (FFT), and generating Mel-Frequency Cepstral Coefficients (MFCCs).</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="flow-step">
+                            <div class="step-num">03</div>
+                            <div class="step-content">
+                                <h4>Acoustic Model (AM)</h4>
+                                <p>Predicting the probability distribution of phonetic units (phonemes or sub-words) given the extracted acoustic spectral features.</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="flow-step">
+                            <div class="step-num">04</div>
+                            <div class="step-content">
+                                <h4>Pronunciation Lexicon</h4>
+                                <p>Mapping sequence of recognized phonemes into valid words in the target vocabulary (Grapheme-to-Phoneme dictionary).</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+                        <div class="flow-step">
+                            <div class="step-num">05</div>
+                            <div class="step-content">
+                                <h4>Language Model (LM) & Decoder</h4>
+                                <p>Utilizing N-gram or Transformer neural language models with Beam Search decoding to determine the most grammatically probable sentence.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3 -->
+                <section id="math-mfcc" class="doc-section">
+                    <h2><i class="fa-solid fa-wave-pulse section-heading-icon"></i> 3. Acoustic Processing & Mel-Frequency Scale</h2>
+                    <p>
+                        Human auditory perception does not perceive pitch linearly. A frequency change between 100 Hz and 200 Hz is perceived 
+                        far more distinctly than a change between 5,000 Hz and 5,100 Hz. ASR systems model this using the <strong>Mel Scale</strong>:
+                    </p>
+                    <div class="code-math-block">
+                        <code>Mel(f) = 2595 × log10(1 + f / 700)</code>
+                    </div>
+                    <p>
+                        By applying a triangular Mel filter bank across the Fourier spectrum and taking the Discrete Cosine Transform (DCT), 
+                        we obtain <strong>13 to 39 MFCC features per frame</strong>, compressing audio into an information-dense representation 
+                        optimized for deep neural networks.
+                    </p>
+                </section>
+
+                <!-- Section 4 -->
+                <section id="models" class="doc-section">
+                    <h2><i class="fa-solid fa-network-wired section-heading-icon"></i> 4. Evolution of ASR Models</h2>
+                    <div class="models-comparison-grid">
+                        <div class="model-box">
+                            <h4>Classical Architecture (HMM-GMM)</h4>
+                            <p>Hidden Markov Models (HMM) modeled temporal state transitions, while Gaussian Mixture Models (GMM) estimated phonetic emission probabilities. Requires explicit acoustic and language model decoupling.</p>
+                        </div>
+                        <div class="model-box">
+                            <h4>Hybrid Neural Models (DNN-HMM)</h4>
+                            <p>Deep Neural Networks (DNN, CNN, LSTM) replaced GMMs to model phonetic posteriors directly from raw filter banks, providing dramatic Word Error Rate (WER) reductions.</p>
+                        </div>
+                        <div class="model-box highlight">
+                            <h4>Modern End-to-End Deep Learning (Google & Whisper)</h4>
+                            <p>Direct sequence-to-sequence mappings using Connectionist Temporal Classification (CTC), Conformer, and Transformer self-attention. Google Speech Recognition API uses massive distributed neural networks trained on petabytes of multilingual conversational speech.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 5 -->
+                <section id="tech-stack" class="doc-section">
+                    <h2><i class="fa-solid fa-cubes section-heading-icon"></i> 5. VoiceAI Implementation Stack</h2>
+                    <p>
+                        Our implementation is crafted to demonstrate a full-stack, enterprise-grade architecture suitable for college evaluation:
+                    </p>
+                    <div class="tech-table-wrapper">
+                        <table class="tech-table">
+                            <thead>
+                                <tr>
+                                    <th>Layer</th>
+                                    <th>Technology</th>
+                                    <th>Role & Engineering Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Frontend UI</strong></td>
+                                    <td>HTML5, CSS3, ES6+ JavaScript</td>
+                                    <td>Dark glassmorphism theme, dynamic visualizer, responsive grid layout, and accessible controls.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Real-Time Audio</strong></td>
+                                    <td>Web Audio API & AudioContext</td>
+                                    <td>Client-side microphone sampling, frequency spectrum visualization via AnalyserNode, and zero-dependency 16kHz PCM WAV transcoding.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Streaming ASR</strong></td>
+                                    <td>W3C Web Speech API</td>
+                                    <td>Sub-second low-latency streaming transcription directly in supporting browsers (Chrome, Edge, Safari).</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Backend Framework</strong></td>
+                                    <td>Python Flask 3.x</td>
+                                    <td>RESTful API endpoints for audio file uploads, multi-language routing, transcript metadata management, and health probes.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Recognition Engine</strong></td>
+                                    <td>SpeechRecognition + Google Cloud ASR</td>
+                                    <td>Dynamic energy thresholding, ambient noise cancellation, and high-precision phonetic decoding for 15+ languages.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Production WSGI</strong></td>
+                                    <td>Gunicorn (Green Unicorn)</td>
+                                    <td>Production multi-worker process manager with thread pooling and timeout protection.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cloud Platform</strong></td>
+                                    <td>Render (render.yaml Blueprint)</td>
+                                    <td>Automatic HTTPS, containerized builds, environment variable management, and continuous global deployment.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Section 6 -->
+                <section id="applications" class="doc-section">
+                    <h2><i class="fa-solid fa-briefcase section-heading-icon"></i> 6. Real-World Applications of ASR</h2>
+                    <div class="apps-grid">
+                        <div class="app-card">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                            <h4>Medical Dictation & EHR</h4>
+                            <p>Physicians transcribe patient encounters, clinical notes, and surgical records hands-free directly into Electronic Health Record (EHR) databases.</p>
+                        </div>
+                        <div class="app-card">
+                            <i class="fa-solid fa-universal-access"></i>
+                            <h4>Assistive Accessibility</h4>
+                            <p>Real-time automated closed captioning and transcription for deaf and hard-of-hearing individuals during live broadcasts, conferences, and classrooms.</p>
+                        </div>
+                        <div class="app-card">
+                            <i class="fa-solid fa-headset"></i>
+                            <h4>Contact Centers & Telephony</h4>
+                            <p>Customer call transcription, automated sentiment classification, interactive voice response (IVR), and compliance monitoring.</p>
+                        </div>
+                        <div class="app-card">
+                            <i class="fa-solid fa-car"></i>
+                            <h4>Automotive & Smart IoT</h4>
+                            <p>Hands-free voice command systems in automotive cabins, home automation (Siri, Alexa, Google Assistant), and industrial voice interfaces.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 7: Viva Q&A Guide -->
+                <section id="viva-questions" class="doc-section">
+                    <h2><i class="fa-solid fa-clipboard-question section-heading-icon"></i> 7. College Project Viva & Oral Exam Q&A</h2>
+                    <p class="viva-intro">
+                        Be prepared to explain your project confidently during your demonstration with these curated CSE AIML questions:
+                    </p>
+
+                    <div class="qa-accordion">
+                        <div class="qa-item">
+                            <h4 class="qa-question"><i class="fa-solid fa-circle-question"></i> Q1: What metric is used to evaluate the accuracy of an ASR system?</h4>
+                            <div class="qa-answer">
+                                <p><strong>Answer:</strong> The primary metric is <strong>Word Error Rate (WER)</strong>. It is formulated as:</p>
+                                <code>WER = (Substitutions + Insertions + Deletions) / Total Reference Words</code>
+                                <p>A lower WER signifies a more accurate transcript. For character-level languages like Mandarin, <strong>Character Error Rate (CER)</strong> is used instead.</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <h4 class="qa-question"><i class="fa-solid fa-circle-question"></i> Q2: Why is 16,000 Hz (16 kHz) the standard sampling rate for speech recognition?</h4>
+                            <div class="qa-answer">
+                                <p><strong>Answer:</strong> According to the <strong>Nyquist-Shannon Sampling Theorem</strong>, to accurately reconstruct a signal, the sampling rate must be at least twice the highest frequency component (<code>fs ≥ 2 × fmax</code>). Human intelligible speech frequencies predominantly lie below 8,000 Hz. Sampling at 16 kHz captures up to 8 kHz of spectral content, capturing essential formant frequencies while minimizing unnecessary file size and computational overhead.</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <h4 class="qa-question"><i class="fa-solid fa-circle-question"></i> Q3: What is the difference between Acoustic Models and Language Models?</h4>
+                            <div class="qa-answer">
+                                <p><strong>Answer:</strong></p>
+                                <ul>
+                                    <li><strong>Acoustic Model:</strong> Maps audio signals (MFCCs / spectrogram frames) to phonemes (sounds). It asks: <em>"What sound was produced?"</em></li>
+                                    <li><strong>Language Model:</strong> Assigns probabilities to sequences of words. It asks: <em>"Which sentence makes grammatical and contextual sense?"</em> For example, helping the system differentiate between "recognize speech" and "wreck a nice beach".</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <h4 class="qa-question"><i class="fa-solid fa-circle-question"></i> Q4: How does this project handle different languages like Hindi and Marathi?</h4>
+                            <div class="qa-answer">
+                                <p><strong>Answer:</strong> By passing ISO / BCP-47 language codes (e.g., <code>hi-IN</code> for Hindi and <code>mr-IN</code> for Marathi) to the Google Speech Recognition API and Web Speech API. The underlying neural models activate vocabulary models and phonetic representations specific to Devanagari script and regional phonology.</p>
+                            </div>
+                        </div>
+
+                        <div class="qa-item">
+                            <h4 class="qa-question"><i class="fa-solid fa-circle-question"></i> Q5: Why did you implement dual engines (Web Speech API + Backend Google API)?</h4>
+                            <div class="qa-answer">
+                                <p><strong>Answer:</strong> Dual engines provide the best of both worlds:</p>
+                                <ul>
+                                    <li><strong>Web Speech API:</strong> Provides zero-latency, streaming live transcripts directly inside modern browsers as the user speaks, without uploading chunks every second.</li>
+                                    <li><strong>Backend Flask + Google API:</strong> Provides high-fidelity, server-side acoustic verification for uploaded audio files (WAV, MP3, etc.) and full cross-browser fallback reliability on mobile and desktop.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <!-- Website Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="logo-icon-sm">
+                    <i class="fa-solid fa-waveform-lines"></i>
+                </div>
+                <span class="footer-title">VoiceAI – Academic Documentation</span>
+            </div>
+            <div class="footer-links">
+                <a href="/">Studio</a>
+                <span class="dot-separator">•</span>
+                <a href="/about">About ASR</a>
+                <span class="dot-separator">•</span>
+                <a href="/api/health" target="_blank">Health Check</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 VoiceAI Project. CSE AIML Department.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
